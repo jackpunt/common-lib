@@ -1,4 +1,5 @@
-import type { EventDispatcher } from 'createjs-module';
+import { EventDispatcher, Stage } from 'createjs-module';
+export declare function makeStage(canvasId: string): Stage;
 export declare function className(obj: {
     constructor: {
         name: any;
