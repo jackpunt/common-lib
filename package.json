@@ -24,6 +24,7 @@
   "homepage": "https://github.com/jackpunt/common-lib#readme",
   "dependencies": {
     "createjs-module": "^0.8.3",
+    "esm": "^3.2.25",
     "moment": "^2.29.1"
   }
 }
