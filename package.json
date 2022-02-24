@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest --runInBand --force-exit --detectOpenHandles --verbose",
     "clean": "rm -f lib/*",
-    "build": "npm run clean; npm run tsc",
+    "build": "npm run clean; npm run tsc; date",
     "tsc": "tsc"
   },
   "repository": {
@@ -24,7 +24,6 @@
   "homepage": "https://github.com/jackpunt/common-lib#readme",
   "dependencies": {
     "createjs-module": "^0.8.3",
-    "esm": "^3.2.25",
     "moment": "^2.29.1"
   }
 }
