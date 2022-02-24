@@ -1,0 +1,29 @@
+{
+  "name": "@thegraid/common-lib",
+  "version": "1.0.0",
+  "description": "common utilities",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "jest --runInBand --force-exit --detectOpenHandles --verbose",
+    "clean": "rm -f lib/*",
+    "build": "npm run clean; npm run tsc",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackpunt/common-lib.git"
+  },
+  "author": "Jeff Peck <jpeckj@gmail.com> (http://thegraid.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackpunt/common-lib/issues"
+  },
+  "homepage": "https://github.com/jackpunt/common-lib#readme",
+  "dependencies": {
+    "createjs-module": "^0.8.3",
+    "moment": "^2.29.1"
+  }
+}
