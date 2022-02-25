@@ -2,9 +2,9 @@
   "name": "@thegraid/common-lib",
   "version": "1.0.0",
   "description": "common utilities",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "files": [
-    "lib"
+    "dist"
   ],
   "scripts": {
     "test": "jest --runInBand --force-exit --detectOpenHandles --verbose",
