@@ -1,5 +1,5 @@
 import { Container, DisplayObject, Point, Matrix2D, Event } from 'createjs-module';
-import { XY, S } from './basic-intfs';
+import { XY, S } from '.';
 
 export type SC = ScaleableContainer
 

@@ -1,6 +1,5 @@
 import { DisplayObject, EventDispatcher, Shape } from 'createjs-module';
-import { C, S } from './basic-intfs';
-import { stime } from './types';
+import { C, S, stime } from '.';
 
 // An injected singleton
 /**
