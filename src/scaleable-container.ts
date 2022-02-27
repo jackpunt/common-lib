@@ -3,7 +3,7 @@ import { XY, S } from '.';
 
 export type SC = ScaleableContainer
 
-type ScaleParams = { zscale?: number, initScale?: number, zero?: number, base?: number, min?: number, max?: number, limit?: number }
+export type ScaleParams = { zscale?: number, initScale?: number, zero?: number, base?: number, min?: number, max?: number, limit?: number }
 
 export class ScaleEvent extends Event {
   constructor(type: string, scale: number, scaleNdx: number) {
