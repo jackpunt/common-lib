@@ -7,6 +7,7 @@
     "dist"
   ],
   "scripts": {
+    "pub": "npm run build; npm version patch; npm publish --scope public",
     "test": "jest --runInBand --force-exit --detectOpenHandles --verbose",
     "clean": "rm -f lib/*",
     "build": "npm run clean; npm run tsc; date",
