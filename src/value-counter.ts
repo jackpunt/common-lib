@@ -63,9 +63,9 @@ export class ValueCounter extends Container {
    * @param fontSize
    */
   setLabel(value: string | Text, offset: XY = { x: 0, y: this.high / 2 }, fontSize = 8) {
-    let label: Text = (typeof (value) === "string")
+    let label: Text = (typeof value === "string")
       ? new Text("" + value, F.fontSpec(fontSize, this.fontName))
-      : (value as Text);
+      : value;
     this.label = label;
     let width = label.getMeasuredWidth();
     //let height = label.getMeasuredLineHeight()

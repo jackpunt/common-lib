@@ -2,13 +2,11 @@
 export type WH = { width: number, height: number };
 export type XY = { x: number, y: number }; // less than a Point
 export type RC = { row: number, col: number}
+export type XYWH = { x: number, y: number, w: number, h: number }; // like a Rectangle
 
 /** Font things */
 export namespace F {
   export function fontSpec(size: number = 32, font: string = S.defaultFont) { return `${size}px ${font}` }
-  export function timedPromise<T>(ms: number, v?: T): Promise<T> {
-    return new Promise((res, rej) => setTimeout(()=>res(v), ms))
-  }
 }
 
 /** Math things */
@@ -118,21 +116,22 @@ export namespace C {
 }
 
 // Copied from: https://dev.to/svehla/typescript-object-fromentries-389c
-// export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
-// type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
-// type Cast<X, Y> = X extends Y ? X : Y
-// type FromEntries<T> = T extends [infer Key, any][]
-//   ? { [K in Cast<Key, string>]: Extract<ArrayElement<T>, [K, any]>[1]}
-//   : { [key in string]: any }
-
-// export type FromEntriesWithReadOnly<T> = FromEntries<DeepWriteable<T>>
-
+type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };
+type Cast<X, Y> = X extends Y ? X : Y
+type FromEntries<T> = T extends [infer Key, any][]
+  ? { [K in Cast<Key, string>]: Extract<T[number], [K, any]>[1]}
+  : { [key in string]: any }
+export type FromEntriesWithReadOnly<T> = FromEntries<DeepWriteable<T>>
 
 // declare global {
 //    interface ObjectConstructor {
 //      fromEntries<T>(obj: T): FromEntriesWithReadOnly<T>
 //   }
 // }
+// maybe find types of value when not [infer Key, any][] ? union of values
+// : T extends [string, infer Vtype][] 
+//   ? { [key in string]: Vtype}
+// https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#type-inference-in-conditional-types
 
 export class Obj {
   /** like Object.fromEntries(...[string, any]) 
@@ -148,7 +147,10 @@ export class Obj {
   }
   /** clone: make a shallow copy of obj, using Object.fromEntries(ary) */
   static objectFromEntries<T extends object>(obj: T): T {
-    return Object.fromEntries(Object.entries(obj)) as T // Object.fromEntries now available in TypeScript!
+    return Object.fromEntries(Object.entries(obj)) as T
+  }
+  static objectFromEntriesOfReadonly<T extends object>(obj: T): FromEntriesWithReadOnly<T>  {
+    return Object.fromEntries(Object.entries(obj)) as FromEntriesWithReadOnly<T>
   }
 }
 
