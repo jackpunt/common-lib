@@ -10,7 +10,7 @@
     "pub": "npm run build; npm version patch; npm publish --scope public",
     "testEdit": "test/testEditBox.sh",
     "test": "jest --runInBand --force-exit --detectOpenHandles --verbose",
-    "clean": "rm -f lib/*",
+    "clean": "rm -f dist/*",
     "build": "npm run clean; npm run tsc; date",
     "tsc": "tsc"
   },
@@ -25,7 +25,6 @@
   },
   "homepage": "https://github.com/jackpunt/common-lib#readme",
   "dependencies": {
-    "createjs-module": "^0.8.3",
     "moment": "^2.29.1",
     "tslib": "^2.3.1"
   }
