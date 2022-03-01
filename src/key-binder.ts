@@ -87,7 +87,7 @@ export class KeyBinder extends EventDispatcher {
     let bits = [ALT, META, CTRL, KEYUP, SHIFT].map( bit => xbit(keycode, bit))
     let ccode = String.fromCharCode(keycode)
     let str = KeyBinder.codeKey(keycode) || (bits[4] ? ccode : ccode.toLowerCase());
-    console.log( `keycode(${keycode}) => string(${str})`)
+    this.details && console.log( `keycode(${keycode}) => string(${str})`)
     let mods = ['A-', 'M-', 'C-', '^-']
     mods.forEach((mod, n) => {if (bits[n]) {str = `${mod}${str}`}})
     return str
@@ -236,7 +236,7 @@ export class KeyBinder extends EventDispatcher {
     let keymap: Keymap = !!this.focus ? this.getLocalKeymap(this.focus) : this.keymap
     let keyStr = (typeof e === 'string') ? e : (e as KeyboardEvent).key
     let bind: Binding = keymap[kcode] 
-    if (!bind && !!keymap.regexs) {
+    if (!bind && !!keymap.regexs && keymap.regexs.length > 0) {
       let regexs = keymap.regexs
       let rexBind = regexs.find(({regex, bind}) => {
         this.details && console.log(stime(this, ".dispatchKeyCode: find"), { keyStr, regex, bind}, regex.exec(keyStr))

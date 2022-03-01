@@ -72,7 +72,7 @@ export namespace C {
   /** array of color components: [r, g, b, a] */
   export function values(rgb: string) { return rgb.match(/[.|\d]+/g).map(Number)}
   /** distance between two rgb colors */
-  export function dist(rgb1: string, rgb2: string) { 
+  export function dist(rgb1: string, rgb2: string): number { 
     let v1 = C.nameToRgba(rgb1), v2 = C.nameToRgba(rgb2) 
     let ds = (v1: Uint8ClampedArray, v2: Uint8ClampedArray, i: number) => { return (v1[i] - v2[i]) * (v1[i] - v2[i]) }
     return Math.sqrt(ds(v1, v2, 0) + ds(v1, v2, 1) + ds(v1, v2, 2))
