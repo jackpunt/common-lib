@@ -21,7 +21,7 @@ export function json(obj: object): string {
 
 /** suitable input to new URL(url) */
 export function buildURL(scheme: string, host: string, domain: string, port: number, path?: string): string {
-  return `${scheme}//${host}.${domain}:${port}/${!!path?path:''}`
+  return `${scheme}://${host}.${domain}:${port}/${!!path?path:''}`
 }
 /** drill down through value of inner fields. */
 export function findFieldValue(obj: object, ... names: Array<string|Array<string>> ): any {
