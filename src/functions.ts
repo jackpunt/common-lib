@@ -18,7 +18,13 @@ stime.fmt = "MM-DD kk:mm:ss.SSS"
 export function json(obj: object): string {
   return JSON.stringify(obj).replace(/"/g, '')
 }
-
+/** check process.arg then process.env then defVal */
+export function argVal(name: string, defVal: string, k: string = '--'): string {
+  const envVal = process.env[name] || defVal
+  const argKey = (k == '=') ? `${name}${k}` : `${k}${name}`
+  const argVal = process.argv.find((val, ndx, ary) => (ndx > 0 && ary[ndx - 1] == argKey)) || envVal
+  return argVal
+}
 /** suitable input to new URL(url) */
 export function buildURL(scheme: string, host: string, domain: string, port: number, path?: string): string {
   return `${scheme}://${host}.${domain}:${port}/${!!path?path:''}`
