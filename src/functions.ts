@@ -6,11 +6,11 @@ export function className (obj: { constructor: { name: any; }; }): string {
 }
 
 /** timestamp and prefix string from constructor name. */
-export function stime (obj?: { constructor: { name: string; }; }, f?: string): string { 
+export function stime (obj?: { constructor: { name: string; }; } | string, f?: string): string { 
   let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
   let canv = !!stage ? (!!stage.canvas ? " C" : " N") : " -"
-  let name = !!obj ? (" "+className(obj)) : ""
-  return `${moment().format(stime.fmt)}${canv}${name}${!!f?f:''}`
+  let name = (typeof obj === 'object') ? `${className(obj)}` : obj
+  return `${moment().format(stime.fmt)}${canv} ${name}${!!f?f:''}`
 }
 stime.fmt = "MM-DD kk:mm:ss.SSS"
 
