@@ -9,7 +9,7 @@ export function className (obj: { constructor: { name: any; }; }): string {
 export function stime (obj?: { constructor: { name: string; }; } | string, f?: string): string { 
   let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
   let canv = !!stage ? (!!stage.canvas ? " C" : " N") : " -"
-  let name = (typeof obj === 'object') ? `${className(obj)}` : obj
+  let name = (typeof obj === 'object') ? `${className(obj)}` : (obj || '')
   return `${moment().format(stime.fmt)}${canv} ${name}${!!f?f:''}`
 }
 stime.fmt = "MM-DD kk:mm:ss.SSS"
