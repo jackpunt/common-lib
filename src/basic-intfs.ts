@@ -152,6 +152,19 @@ export class Obj {
   static objectFromEntriesOfReadonly<T extends object>(obj: T): FromEntriesWithReadOnly<T>  {
     return Object.fromEntries(Object.entries(obj)) as FromEntriesWithReadOnly<T>
   }
+  /** 
+   * def contains all required elements of T
+   * obj contains only partial elements of T
+   * return value is copy of obj backfilled with def
+   * (or copy of def, with obj overwriting)
+   */
+  static mergeDefaults<T extends object>(obj: T, def: T): T {
+    let rv = {}
+    Object.entries(def).forEach(([key, value]) => {
+      rv[key] = obj[key] || value
+    })
+    return rv as T
+  }
 }
 
 
