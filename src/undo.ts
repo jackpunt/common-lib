@@ -61,7 +61,25 @@ export class Undo extends Array<UndoRec[]> {
     }
     return this
   }
+  /** push openRec, even if empty or !this.enabled 
+   * @param note aid to debug, mark the push'd UndoRec
+  */
+  saveUndo(note?: string): this {
+    this.openRec['_enabled'] = this.enabled // marker of save point
+    this.openRec['_note'] = note
+    this.push(this.openRec)
+    this.openRec = new Array(0) // Array<UndoRec>(0)
+    return this
+  }
 
+  /** pop all UndoRecs back to previous saveUndo; restore that openRec, and reseet this.enabled. */
+  restoreUndo(popAll = true): this {
+    if (popAll) while (this[this.length-1]['_enabled'] == undefined) this.pop() // popAll
+    this.openRec = super.pop()
+    this.enabled = this.openRec['_enabled']
+    delete this.openRec['_enabled']; delete this.openRec['_note']
+    return this
+  }
   /** Undo.pop() also pops and applies all the UndoRecs before returning. 
    * @return the [now empty] UndoRec that was removed and applied (may be undefined)
    */
