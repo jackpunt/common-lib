@@ -5,8 +5,9 @@ export type RC = { row: number, col: number}
 export type XYWH = { x: number, y: number, w: number, h: number }; // like a Rectangle
 
 /** Font things */
-export namespace F {
-  export function fontSpec(size: number = 32, font: string = S.defaultFont) { return `${size}px ${font}` }
+export class F {
+  static defaultFont = 'sans-serif'
+  static fontSpec(size: number = 32, font: string = F.defaultFont) { return `${size}px ${font}` }
 }
 
 /** Math things */
@@ -32,7 +33,6 @@ export namespace S {
 
   export const dirRot: object = { N: 0, E: 90, S: 180, W: 270, NE: 30, SE: 150, SW: 210, NW: 330 }
   export const dirRev: object = { N: S, S: N, E: W, W: E, NE: SW, SE: NW, SW: NE, NW: SE }
-  export const defaultFont: string = "sans-serif"
 
   export const rgbColor: string = "rgbColor"// card prop
 
@@ -89,6 +89,7 @@ export namespace C {
 
   export const black:       string = "black"        // text color
   export const white:       string = "white"
+  // for CityMap:
   export const vpWhite:     string = "rgba(255, 255, 255,  1)"
   export const briteGold:   string = "rgba(255, 213,  77,  1)"
   export const coinGold:    string = "rgba(235, 188,   0,  1)"
@@ -101,10 +102,6 @@ export namespace C {
   export const debtMark:    string = "rgba( 50,   0,   0, .3)"
   export const markColor:   string = "rgba( 50,  50,  50, .3)"
   export const capColor:    string = "rgba(100,   0,   0, .8)"
-  export const scaleBack:   string = "rgba(155, 100, 150, .3)"
-  export const policyBack:  string = "rgba(255, 100, 200, .3)"
-  export const auctionBack: string = "rgba(180, 230, 180, .3)"
-  export const discardBack: string = "rgba(120, 230, 120, .6)"
   export const counterColor:string = "lightblue"
   export const debtCounter: string = "lightgreen"
   export const phaseCounter:string = "lightgreen"
@@ -112,7 +109,7 @@ export namespace C {
   export const roundCounter:string = "lightgreen"
   export const turnCounter: string = "lightgreen"
   export const policySlots: string = "rgba(255, 100, 200, .3)";
-
+  // https://www.quackit.com/css/color/charts/css_color_names_chart.cfm
 }
 
 // Copied from: https://dev.to/svehla/typescript-object-fromentries-389c
