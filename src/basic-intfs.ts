@@ -150,10 +150,10 @@ export class Obj {
     return Object.fromEntries(Object.entries(obj)) as FromEntriesWithReadOnly<T>
   }
   /** 
-   * def contains all required elements of T
-   * obj contains only partial elements of T
-   * return value is copy of obj backfilled with def
-   * (or copy of def, with obj overwriting)
+   * return a copy of obj backfilled with def (or copy of def, with obj overwriting)
+   * @param obj contains partial elements of T
+   * @param def contains all required elements of T
+   * @return copy of def with overrides from obj
    */
   static mergeDefaults<T extends object>(obj: T, def: T): T {
     let rv = {}
