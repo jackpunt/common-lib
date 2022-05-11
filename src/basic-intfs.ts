@@ -68,7 +68,7 @@ export namespace C {
     return context.getImageData(0,0,1,1).data;
   }
   /** convert arbitary CSS color to rgba() notation, reset alpha if supplied. */
-  function nameToRgbaString(name: string, alpha?: number|string) {
+  export function nameToRgbaString(name: string, alpha?: number|string) {
     let v = C.nameToRgba(name)
     return `rgba(${v[0]},${v[1]},${v[2]},${alpha || (v[3]/255).toFixed(2)})`
   }
