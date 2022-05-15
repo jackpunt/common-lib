@@ -18,7 +18,7 @@ stime.ts = () => {
   // return moment().format(stime.fmt)
   // TODO: splice components to replace keys in fmt: YYYY MM DD hh/kk mm ss SSS
   let date = new Date(); date.setMinutes(date.getMinutes() - date.getTimezoneOffset()) // Zulu -> Local
-  let iso = date.toISOString(), YYYY = iso.substring(0,4), MM_DD = iso.substring(5, 10), kk_mm_ss_SSS = iso.substring(11, 22)
+  let iso = date.toISOString(), YYYY = iso.substring(0,4), MM_DD = iso.substring(5, 10), kk_mm_ss_SSS = iso.substring(11, 23)
   let ts = `${MM_DD} ${kk_mm_ss_SSS}`
   return ts
 }
