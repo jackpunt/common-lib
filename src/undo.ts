@@ -1,4 +1,4 @@
-import { stime } from '.';
+import { stime } from './index.js';
 
 /** Generic Undo record: closure OR {object:, field:, value:} */
 export class UndoRec {
