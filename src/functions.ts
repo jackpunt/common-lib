@@ -15,7 +15,7 @@ export function stime (obj?: string | { constructor: { name: string; }; }, f: st
 /** supply an annotation after the time stamp. */
 stime.anno = (obj: string | { constructor: { name: string; }; }) => {
   let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
-  return !!stage ? (!!stage.canvas ? " C" : " N") : " -"
+  return !!stage ? (!!stage.canvas ? " C" : " N") : " -" as string
 }
 stime.fmt = "MM-DD kk:mm:ss.SSS" // replaced by stime.ts() to avoid 'moment'
 stime.ts = () => { 
