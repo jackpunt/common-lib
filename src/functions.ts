@@ -6,14 +6,18 @@ export function className (obj: { constructor: { name: any; }; }): string {
 }
 
 /** timestamp and prefix string from constructor name. */
-export function stime (obj?: { constructor: { name: string; }; } | string, f: string = ''): string { 
-  let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
-  let canv = !!stage ? (!!stage.canvas ? " C" : " N") : " -"
+export function stime (obj?: string | { constructor: { name: string; }; }, f: string = ''): string { 
+  let anno = stime.anno(obj)
   let name = (typeof obj === 'object') ? className(obj) : (obj || '')
   let spac = (name == '') && (f == '') ? '' : ' '
-  return `${stime.ts()}${canv}${spac}${name}${f}`
+  return `${stime.ts()}${anno}${spac}${name}${f}`
 }
-stime.fmt = "MM-DD kk:mm:ss.SSS"
+/** supply an annotation after the time stamp. */
+stime.anno = (obj: string | { constructor: { name: string; }; }) => {
+  let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
+  return !!stage ? (!!stage.canvas ? " C" : " N") : " -"
+}
+stime.fmt = "MM-DD kk:mm:ss.SSS" // replaced by stime.ts() to avoid 'moment'
 stime.ts = () => { 
   // return moment().format(stime.fmt)
   // TODO: splice components to replace keys in fmt: YYYY MM DD hh/kk mm ss SSS
