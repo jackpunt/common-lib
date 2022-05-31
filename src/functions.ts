@@ -1,4 +1,3 @@
-//import * as moment from 'moment';
 
 /** extra name field from constructor/class */
 export function className (obj: { constructor: { name: any; }; }): string { 

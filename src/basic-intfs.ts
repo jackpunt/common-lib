@@ -59,7 +59,7 @@ export namespace S {
 }
 /** color strings */
 export namespace C {
-  /** Returns array<number> in RGBA order in the range 0 to 255 */
+  /** Returns array<number> in RGBA order in the range 0 to 255 (requires document & canvas) */
   export function nameToRgba(name: string) {
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('2d');
