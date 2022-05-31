@@ -1,6 +1,6 @@
 import { C } from "./basic-intfs"
 
-namespace AT {
+export namespace AT {
   const ansiReset = ['reset', '_reset'] as const
   type AnsiEnd = 'reset' | '_reset'
   type AnsiKey_ = 'reset' | 'rgb' | 'n256'
