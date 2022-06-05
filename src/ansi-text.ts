@@ -1,5 +1,5 @@
 import { C } from "./basic-intfs"
-
+// https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 export namespace AT {
   const ansiReset = ['reset', '_reset'] as const
   type AnsiEnd = 'reset' | '_reset'
