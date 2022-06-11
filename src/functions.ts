@@ -71,9 +71,9 @@ stime.fs = (fmt = stime.fmt, date = new Date()) => {
 }
 
 /** compact JSON.stringify(obj) [unquote the keys] */
-export function json(obj, quoteKeys = false) {
-  if (quoteKeys) return JSON.stringify(obj)
-  else return JSON.stringify(obj).replace(/"(\w*)":/g, '$1:')
+export function json(obj: object, unquoteKeys = true) {
+  let rv = JSON.stringify(obj)
+  return unquoteKeys ? rv.replace(/"(\w*)":/g, '$1:') : rv
 }
 /** check process.arg then process.env then defVal */
 export function argVal(name: string, defVal: string, k: string = '--'): string {
