@@ -4,31 +4,76 @@ export function className (obj: { constructor: { name: any; }; }): string {
   return (obj === undefined) ? 'undefined' : (!!obj && obj.constructor) ? obj.constructor.name : 'no_class'
 }
 
-/** timestamp and prefix string from constructor name. */
+/** timestamp, annotation, prefix (constructor name) and initial/format string. */
 export function stime (obj?: string | { constructor: { name: string; }; }, f: string = ''): string { 
   let anno = stime.anno(obj)
   let name = (typeof obj === 'object') ? className(obj) : (obj || '')
   let spac = (name == '') && (f == '') ? '' : ' '
-  return `${stime.ts()}${anno}${spac}${name}${f}`
+  return `${stime.fs()}${anno}${spac}${name}${f}`
 }
 /** supply an annotation after the time stamp. */
 stime.anno = (obj: string | { constructor: { name: string; }; }) => {
+  // TODO: move 'table','stage' logic to CityMap
   let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
   return !!stage ? (!!stage.canvas ? " C" : " N") : " -" as string
 }
-stime.fmt = "MM-DD kk:mm:ss.SSS" // replaced by stime.ts() to avoid 'moment'
-stime.ts = () => { 
-  // return moment().format(stime.fmt)
-  // TODO: splice components to replace keys in fmt: YYYY MM DD hh/kk mm ss SSS
-  let date = new Date(); date.setMinutes(date.getMinutes() - date.getTimezoneOffset()) // Zulu -> Local
-  let iso = date.toISOString(), YYYY = iso.substring(0,4), MM_DD = iso.substring(5, 10), kk_mm_ss_SSS = iso.substring(11, 23)
-  let ts = `${MM_DD} ${kk_mm_ss_SSS}`
-  return ts
+/** fields to extract from toISOString; see stime.fs.
+ * 
+ * Default: MM-DDTkk:mm:ss.SSSL
+ */
+stime.fmt = "MM-DD kk:mm:ss.SSSL"
+stime.isoFields = {
+    YYYY: [0, 4], YY: [2, 4], MM: [5, 7], DD: [8, 10], T: [10, 11],
+    kk: [11, 13], mm: [14, 16], ss: [17, 19], SSS: [20, 23], SS: [20, 22], S: [20, 21], Z: [23, 24]
+  };
+stime.keys = Object.keys(stime.isoFields)
+/** format fields of ISO date string: YYYY MM DD kk mm ss SSS L/ll/LL/OO
+ * replace fmt letters with indicated substring of Date.toISOString()
+ * @param fmt YYYY-MM-DDTkk:mm:ss.SSSZ
+ * @param hh - 12Hr (zero filled); optionally with: PM/pm
+ * @param HH - 12Hr (space filled); optionally with: PM/pm
+ * @param L - use local timezone, LL -> show Z+/-offset (no-fill), LLL (zero-fill) 
+ * @param OO - force include minute offset: LLLOO or LLOO
+ */
+stime.fs = (fmt = stime.fmt, date = new Date()) => {
+  let isoTZ = (fmt, date) => {
+    if (fmt.includes('L')) {
+      let tzo = date.getTimezoneOffset(), hoff = -Math.floor(tzo / 60)
+      date.setMinutes(date.getMinutes() - tzo) // Zulu -> Local
+      if (fmt.includes('LL')) {
+        let LLL = fmt.includes('LLL')
+        let moff = (tzo % 60).toString().padStart(2, '0')
+        let LLOO = fmt.includes('OO')
+        let ooff = `${(LLOO || moff != '00') ? moff : ''}`
+        let zoff = `${hoff > 0 ? '+' : '-'}${Math.abs(hoff).toString().padStart(2, LLL ? '0' : '')}${!LLOO ? ooff : ''}`
+        let rv = fmt.replace('LLL', zoff).replace('LL', zoff).replace('OO', ooff)
+        return [rv, date.toISOString()]
+      } else {
+        return [fmt.replace('L', ''), date.toISOString()]
+      }
+    }
+    return [fmt, date.toISOString()]
+  }
+  let [rv, isoString] = isoTZ(fmt, date)
+  if (fmt.includes('hh') || fmt.includes('HH')) {
+    let kk = Number.parseInt(isoString.substring(...stime.isoFields['kk']))
+    let hh = (kk > 12 ? kk - 12 : kk).toString().padStart(2, '0')
+    let HH = (kk > 12 ? kk - 12 : kk).toString().padStart(2, ' ')
+    rv = rv.replace('hh', hh)
+    rv = rv.replace('HH', HH)
+    if (kk > 12 && fmt.includes('am')) rv = rv.replace('am', 'pm')
+    if (kk > 12 && fmt.includes('AM')) rv = rv.replace('AM', 'PM')
+  }
+  for (let key of stime.keys) {
+    rv = rv.replace(key, isoString.substring(...stime.isoFields[key]))
+  }
+  return rv
 }
 
-/** compact string of JSON from object */
-export function json(obj: object): string {
-  return JSON.stringify(obj).replace(/"/g, '')
+/** compact JSON.stringify(obj) [unquote the keys] */
+export function json(obj, quoteKeys = false) {
+  if (quoteKeys) return JSON.stringify(obj)
+  else return JSON.stringify(obj).replace(/"(\w*)":/g, '$1:')
 }
 /** check process.arg then process.env then defVal */
 export function argVal(name: string, defVal: string, k: string = '--'): string {
