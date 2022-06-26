@@ -13,8 +13,7 @@ export function stime (obj?: string | { constructor: { name: string; }; }, f: st
 }
 /** supply an annotation after the time stamp. */
 stime.anno = (obj: string | { constructor: { name: string; }; }) => {
-  // TODO: move 'table','stage' logic to CityMap
-  let stage = !!obj && (obj['stage'] || (!!obj['table'] && obj['table']['stage']))
+  let stage = obj?.['stage'] || obj?.['table']?.['stage']
   return !!stage ? (!!stage.canvas ? " C" : " N") : " -" as string
 }
 /** fields to extract from toISOString; see stime.fs.
