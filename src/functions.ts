@@ -3,7 +3,22 @@
 export function className (obj: { constructor: { name: any; }; }): string { 
   return (obj === undefined) ? 'undefined' : (!!obj && obj.constructor) ? obj.constructor.name : 'no_class'
 }
+// https://www.typescriptlang.org/docs/handbook/mixins.html
 
+export type Constructor<T = {}> = new (...args: any[]) => T;
+/** runtime construction of object with merged prototype. */
+export function applyMixins(derivedCtor: any, constructors: any[]) {
+  constructors.forEach((baseCtor) => {
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+      Object.defineProperty(
+        derivedCtor.prototype,
+        name,
+        Object.getOwnPropertyDescriptor(baseCtor.prototype, name) ||
+          Object.create(null)
+      );
+    });
+  });
+}
 /** timestamp, annotation, prefix (constructor name) and initial/format string. */
 export function stime (obj?: string | { constructor: { name: string; }; }, f: string = ''): string { 
   let anno = stime.anno(obj)
@@ -69,10 +84,13 @@ stime.fs = (fmt = stime.fmt, date = new Date()) => {
   return rv
 }
 
-/** compact JSON.stringify(obj) [unquote the keys] */
-export function json(obj: object, unquoteKeys = true) {
+/** compact JSON.stringify(obj) ["key": -> key:][\\ -> \] */
+export function json(obj: object, unquoteKeys = true, rm2Esc: true) {
   let rv = JSON.stringify(obj)
-  return unquoteKeys ? rv.replace(/"(\w*)":/g, '$1:') : rv
+  if (rm2Esc) rv = rv.replace(/\\\\/g, '\\') // remove double-escape 
+  if (unquoteKeys) rv = rv.replace(/"(\w*)":/g, '$1:') // BEWARE: "key": '"foo":bar'  -> key: 'foo:bar'
+  if (unquoteKeys) rv = rv.replace(/([{,])"(\w*)":/g, '$1$2:')
+  return rv
 }
 /** check process.arg then process.env then defVal */
 export function argVal(name: string, defVal: string, k: string = '--'): string {
