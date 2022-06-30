@@ -85,7 +85,7 @@ stime.fs = (fmt = stime.fmt, date = new Date()) => {
 }
 
 /** compact JSON.stringify(obj) ["key": -> key:][\\ -> \] */
-export function json(obj: object, unquoteKeys = true, rm2Esc: true) {
+export function json(obj: object, unquoteKeys = true, rm2Esc = true) {
   let rv = JSON.stringify(obj)
   if (rm2Esc) rv = rv.replace(/\\\\/g, '\\') // remove double-escape 
   if (unquoteKeys) rv = rv.replace(/"(\w*)":/g, '$1:') // BEWARE: "key": '"foo":bar'  -> key: 'foo:bar'
