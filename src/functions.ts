@@ -145,3 +145,10 @@ export function untilP<T>(pred: (v?: T, ...args: any) => boolean, actionP: (v?: 
 export function timedPromise<T>(ms: number, v?: T): Promise<T> {
   return new Promise((res, rej) => setTimeout(() => res(v), ms))
 }
+
+/** TODO: get es2015 Iterable of Map.entries work... */
+function entriesArray<K,V>(k: Map<K,V>) {
+  let rv: [K,V][] = []
+  for (let m of k) { rv.push(m) }
+  return rv
+}
