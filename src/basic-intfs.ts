@@ -156,6 +156,10 @@ export class Obj {
   }
   /** 
    * return a copy of obj backfilled with def (or copy of def, with obj overwriting)
+   *
+   * see also: webpack-merge: 
+   * https://github.com/just-jeb/angular-builders/blob/13.x.x/packages/custom-webpack
+   * 
    * @param obj contains partial elements of T
    * @param def contains all required elements of T
    * @return copy of def with overrides from obj
