@@ -147,7 +147,8 @@ export function timedPromise<T>(ms: number, v?: T): Promise<T> {
 }
 
 /** TODO: get es2015 Iterable of Map.entries work... */
-function entriesArray<K,V>(k: Map<K,V>) {
+// https://github.com/Microsoft/TypeScript/issues/9030
+export function entriesArray<K,V>(k: Map<K,V>) {
   let rv: [K,V][] = []
   for (let m of k) { rv.push(m) }
   return rv
