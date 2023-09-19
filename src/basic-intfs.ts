@@ -57,7 +57,7 @@ export namespace S {
   export const doNotDrag:   string = 'doNotDrag'   // mouse Target property for Dragger
 
 }
-/** color strings */
+/** color strings, see also: https://www.quackit.com/css/color/charts/css_color_names_chart.cfm */
 export namespace C {
   /** Returns array<number> in RGBA order in the range 0 to 255 (requires document & canvas) */
   export function nameToRgba(name: string) {
@@ -70,7 +70,7 @@ export namespace C {
   /** convert arbitary CSS color to rgba() notation, reset alpha if supplied. */
   export function nameToRgbaString(name: string, alpha?: number|string) {
     let v = C.nameToRgba(name)
-    return `rgba(${v[0]},${v[1]},${v[2]},${alpha || (v[3]/255).toFixed(2)})`
+    return `rgba(${v[0]},${v[1]},${v[2]},${alpha ?? (v[3]/255).toFixed(2)})`
   }
   /** add alpha value to an 'rgb(r,g,b)' string */
   export function rgba(rgb: string, a: number): string { return 'rgba' + rgb.substring(3, rgb.length - 1) + ', '+a+')' }

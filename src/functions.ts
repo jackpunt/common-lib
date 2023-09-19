@@ -35,12 +35,11 @@ stime.anno = (obj: string | { constructor: { name: string; }; }) => {
  * 
  * Default: MM-DDTkk:mm:ss.SSSL
  */
-stime.fmt = "MM-DD kk:mm:ss.SSSL"
+stime.fmt = "MM-DD kk:mm:ss.SSSL";
 stime.isoFields = {
     YYYY: [0, 4], YY: [2, 4], MM: [5, 7], DD: [8, 10], T: [10, 11],
     kk: [11, 13], mm: [14, 16], ss: [17, 19], SSS: [20, 23], SS: [20, 22], S: [20, 21], Z: [23, 24]
-  };
-stime.keys = Object.keys(stime.isoFields)
+  } as {[index:string]: [start: number, end: number]};
 /** format fields of ISO date string: YYYY MM DD kk mm ss SSS L/ll/LL/OO
  * replace fmt letters with indicated substring of Date.toISOString()
  * @param fmt YYYY-MM-DDTkk:mm:ss.SSSZ
@@ -49,8 +48,8 @@ stime.keys = Object.keys(stime.isoFields)
  * @param L - use local timezone, LL -> show Z+/-offset (no-fill), LLL (zero-fill) 
  * @param OO - force include minute offset: LLLOO or LLOO
  */
-stime.fs = (fmt = stime.fmt, date = new Date()) => {
-  let isoTZ = (fmt, date) => {
+stime.fs = ((fmt = stime.fmt, date = new Date()) => {
+  const isoTZ = (fmt: string, date: Date) => {
     if (fmt.includes('L')) {
       let tzo = date.getTimezoneOffset(), hoff = -Math.floor(tzo / 60)
       date.setMinutes(date.getMinutes() - tzo) // Zulu -> Local
@@ -78,11 +77,9 @@ stime.fs = (fmt = stime.fmt, date = new Date()) => {
     if (kk > 12 && fmt.includes('am')) rv = rv.replace('am', 'pm')
     if (kk > 12 && fmt.includes('AM')) rv = rv.replace('AM', 'PM')
   }
-  for (let key of stime.keys) {
-    rv = rv.replace(key, isoString.substring(...stime.isoFields[key]))
-  }
+  Object.keys(stime.isoFields).forEach(key => rv = rv.replace(key, isoString.substring(...stime.isoFields[key])));
   return rv
-}
+}) as ((fmt?: string, date?: Date) => string);
 
 /** compact JSON.stringify(obj) ["key": -> key:][\\ -> \] */
 export function json(obj: object, unquoteKeys = true, rm2Esc = true) {
@@ -152,4 +149,11 @@ export function entriesArray<K,V>(k: Map<K,V>) {
   let rv: [K,V][] = []
   for (let m of k) { rv.push(m) }
   return rv
+}
+
+/** reduce to one of each element: ary.forEach(elt => (!rv.includes(elt) -> rv.push(elt))) */
+export function uniq<T>(ary: T[]) {
+  const rv: T[] = [];
+  ary.forEach(elt => rv.includes(elt) || rv.push(elt));
+  return rv;
 }
