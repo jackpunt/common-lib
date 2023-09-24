@@ -30,6 +30,16 @@ export class ImageLoader {
     })
   }
 
+  /**
+   * 
+   * @param args -
+   * - root: path to image directory with trailing '/'
+   * - fnames: string[] basenames of each image to load
+   * - ext: file extension (for ex: 'png' or 'jpg')
+   * 
+   * @param imap supply or create new Map()
+   * @param cb invoked with (imap)
+   */
   constructor(args: { root: string, fnames: string[], ext: string },
     imap = new Map<string, HTMLImageElement>(),
     cb?: (imap: Map<string, HTMLImageElement>) => void)
