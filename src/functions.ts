@@ -151,6 +151,40 @@ export function entriesArray<K,V>(k: Map<K,V>) {
   return rv
 }
 
+export function selectN<T>(bag: T[], n = 1, remove = true) {
+  const rv: T[] = [];
+  for (let i = 0; i < n; i++) {
+    const index = Math.floor(Math.random() * bag.length);
+    rv.push(remove ? bag.splice(index, 1)[0] : bag[index]);
+  }
+  return rv;
+}
+
+export function permute(stack: any[]) {
+  for (let i = 0, len = stack.length; i < len; i++) {
+    let ndx: number = Math.floor(Math.random() * (len - i)) + i
+    let tmp = stack[i];
+    stack[i] = stack[ndx]
+    stack[ndx] = tmp;
+  }
+  return stack;
+}
+/** select items from a that are also in b (based on keyf).
+ *
+ * elements of a that appear (& match) twice appear in result twice.
+ */
+export function Arrays_intersect<T>(a: T[], b: T[], keyf: ((v: T) => any) = v => v) {
+  // return a.filter(va => b.find(vb => keyf(va)===keyf(vb)))
+  const [outer, inner] = [a, b];
+  const outerKey = outer.map(keyf);
+  const innerKey = inner.map(keyf);
+  return outer.filter((av, n) => innerKey.includes(outerKey[n]));
+}
+
+export function removeEltFromArray(elt: any, array: any[]) {
+  return array.splice(array.indexOf(elt), 1);
+}
+
 /** reduce to one of each element: ary.forEach(elt => (!rv.includes(elt) -> rv.push(elt))) */
 export function uniq<T>(ary: T[]) {
   const rv: T[] = [];
