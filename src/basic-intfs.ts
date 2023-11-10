@@ -6,8 +6,52 @@ export type XYWH = { x: number, y: number, w: number, h: number }; // like a Rec
 
 /** Font things */
 export class F {
+  static defaultStyle = 'normal';
+  static defaultWght = 410;
+  static defaultSize = 32; // px
   static defaultFont = 'sans-serif'
-  static fontSpec(size: number = 32, font: string = F.defaultFont) { return `${size}px ${font}` }
+  // https://stackoverflow.com/questions/64583689/setting-font-weight-on-canvas-text
+  /**
+   * Compose a font specifier: 'style weight NNpx family'
+   * 
+   * For historical reasons [GIMP], fam_wght may include a wght, which gets moved to front
+   * 
+   * @param size nominal height of font to use; defaults to F.defaultSize [32]
+   * @param fam_wght font family, may have wght appended; defaults to F.defaultFont ['sans-serif']
+   * @param wght the wght to be used; defaults to wght in fam_wght or F.defaultWght ['410']
+   * @param style optional style [normal, italic]; defaults to F.defaultStyle ['normal']
+   * @returns 
+   */
+  static fontSpec(size: number = F.defaultSize, fam_wght: string = F.defaultFont, wght: string | number = F.defaultWght, style = F.defaultStyle) {
+    // extract weight info, compose: ${style} ${weight} ${family}
+    // ASSERT: style is NOT included in given font_fam: 'nnpx family weight'
+    const regex = / (\d+|thin|light|regular|normal|bold|semibold|heavy)$/i;
+    const match = fam_wght.match(regex);
+    const weight = match?.[1];
+    const family = weight ? fam_wght.slice(0, match.index) : fam_wght;
+    const fontstr = `${style} ${weight ?? wght} ${size}px ${family}`;
+    return fontstr;
+  }
+  static composeFontName(size: number = 32, fam_wght: string = F.defaultFont, wght: string | number = F.defaultWght) { 
+    return F.fontSpec(size, fam_wght, wght);
+  }
+  /** replace weight */
+  static family_wght(fam_wght: string, wght?: string | number) {
+    // extract weight info, compose: ${style} ${weight} ${family}
+    const regex = / (\d+|thin|light|regular|normal|bold|semibold|heavy)$/i;
+    const match = fam_wght.match(regex);
+    const weight = wght ?? match?.[1];
+    const family = weight ? fam_wght.slice(0, match.index) : fam_wght;
+    const fontstr = `${family} ${weight ?? 410}`;
+    return fontstr;
+  }
+
+  /** Extract the 'px' fontSize from fontSpec. */
+  static fontSize(fontSpec: string) {
+    const pixels = fontSpec.match(/(\d+)px/)?.[1];
+    return Number.parseInt(pixels);
+  }
+
 }
 
 /** Math things */

@@ -139,8 +139,15 @@ export function untilP<T>(pred: (v?: T, ...args: any) => boolean, actionP: (v?: 
   let p = actionP(v, ...args)
   p.then((v: T) => !pred(v, ...args) && untilP(pred, actionP, v, ...args))
 }
-export function timedPromise<T>(ms: number, v?: T): Promise<T> {
-  return new Promise((res, rej) => setTimeout(() => res(v), ms))
+
+/**
+ * A Promise that resolves to the given value after ms msecs.
+ * @param ms how long to wait before resolving.
+ * @param value any value.
+ * @returns a Promise that resolves to the given value in ms msecs.
+ */
+export function timedPromise<T>(ms: number, value?: T): Promise<T> {
+  return new Promise((res, rej) => setTimeout(() => res(value), ms))
 }
 
 /** TODO: get es2015 Iterable of Map.entries work... */
@@ -151,6 +158,11 @@ export function entriesArray<K,V>(k: Map<K,V>) {
   return rv
 }
 
+/** randomly select N elements from given array. 
+ * @param bag the array of selectable elements.
+ * @param remove splice selected elements from from bag.
+ * @return an array containing the selected elements.
+ */
 export function selectN<T>(bag: T[], n = 1, remove = true) {
   const rv: T[] = [];
   for (let i = 0; i < n; i++) {
@@ -160,7 +172,8 @@ export function selectN<T>(bag: T[], n = 1, remove = true) {
   return rv;
 }
 
-export function permute(stack: any[]) {
+/** Randomly re-order the elements of the given array (in place) and return it. */
+export function permute<T>(stack: T[]): T[] {
   for (let i = 0, len = stack.length; i < len; i++) {
     let ndx: number = Math.floor(Math.random() * (len - i)) + i
     let tmp = stack[i];
@@ -169,9 +182,15 @@ export function permute(stack: any[]) {
   }
   return stack;
 }
-/** select items from a that are also in b (based on keyf).
- *
- * elements of a that appear (& match) twice appear in result twice.
+
+/** 
+ * Select items from 'a' that are also in 'b' (based on keyf).
+ * 
+ * That is: select a[i] where keyf(a[i]) === keyf(b[j]), for each i (in a) and some j (in b).
+ * 
+ * Like: a.filter(va => b.find(vb => keyf(va) === keyf(vb)))
+ * 
+ * elements of 'a' that appear (& match) twice appear in result twice.
  */
 export function Arrays_intersect<T>(a: T[], b: T[], keyf: ((v: T) => any) = v => v) {
   // return a.filter(va => b.find(vb => keyf(va)===keyf(vb)))
@@ -181,7 +200,8 @@ export function Arrays_intersect<T>(a: T[], b: T[], keyf: ((v: T) => any) = v =>
   return outer.filter((av, n) => innerKey.includes(outerKey[n]));
 }
 
-export function removeEltFromArray(elt: any, array: any[]) {
+/** splice first instance of 'elt' from given 'array' */
+export function removeEltFromArray<T>(elt: T, array: T[]): T[] {
   return array.splice(array.indexOf(elt), 1);
 }
 
