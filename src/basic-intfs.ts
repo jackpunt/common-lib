@@ -58,8 +58,8 @@ export class F {
 export namespace M {
   /**  @return given value rounded to n decimal places. */
   export function decimalRound(value:number, n: number): number {
-    let d = 10 ** n
-    return Math.round(value*d)/d
+    const d = 10 ** n;
+    return Math.round(value * d) / d;
   }
 }
 
