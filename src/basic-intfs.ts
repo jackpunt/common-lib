@@ -48,8 +48,14 @@ export class F {
 
   /** Extract the 'px' fontSize from fontSpec. */
   static fontSize(fontSpec: string) {
-    const pixels = fontSpec.match(/(\d+)px/)?.[1];
-    return Number.parseInt(pixels);
+    const pixels = fontSpec ? Number.parseInt(fontSpec.match(/(\d+)px/)?.[1]) : F.defaultSize;
+    return pixels;
+  }
+
+  /** extract fontName 'family' from fontSpec */
+  static fontName(fontSpec: string) {
+    const family = fontSpec ? fontSpec.match(/\d+px (.*)/)?.[1] : F.defaultFont;
+    return family
   }
 
 }
