@@ -88,8 +88,8 @@ export namespace S {
 
   export const scaled: string = 'scaled'    // Event name on ScaledContainer
   export const Aname:  string = 'Aname'     // anonymous function field name, any object name
-  export const add:    string = 'add'       // HexEvent type add Stone to board
-  export const remove: string = 'remove'    // HexEvent type removeStone from board
+  export const add:    string = 'add'       // HexEvent type add Tile to board
+  export const remove: string = 'remove'    // HexEvent type remove Tile from board
   
   export const onTurnStart:  string = 'onTurnStart'  // onTrigger for Effects
   export const onMove:       string = 'onMove'       // onTrigger for Effects
@@ -102,6 +102,7 @@ export namespace S {
   export const clicked: string = 'clicked'    // CardEvent type
   export const pressmove:string= 'pressmove'  // Createjs Event
   export const pressup: string = 'pressup'    // Createjs Event
+  export const splice: string  = 'splice'     // EditBox event
 
   export const actionEnable: string = 'actionEnable' // RoboEvent type
   export const doNotDrag:   string = 'doNotDrag'   // mouse Target property for Dragger
