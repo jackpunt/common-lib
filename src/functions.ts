@@ -183,6 +183,22 @@ export function permute<T>(stack: T[]): T[] {
   return stack;
 }
 
+/** rotate elements of Array by n positions.
+ * @example
+ * abcdef: n=1 -> bcdefa; n=2 -> cdefab (CCW)
+ * abcdef: n=1 -> fabcde; n=2 -> efabcd (CW)
+ * 
+ * @param ary
+ * @param cw [true] false for ccw rotation
+ */
+export function rotateAry(ary: any[], n = 1, cw = true) {
+  if (cw) n = ary.length - n;
+  const tail = ary.slice(n);
+  const head = ary.slice(0, n);
+  tail.push(...head);
+  return tail;
+}
+
 /** 
  * Select items from 'a' that are also in 'b' (based on keyf).
  * 
