@@ -141,7 +141,7 @@ export namespace C {
   export const YELLOW:      string = 'YELLOW'       // nominal player color
   export const BLACK:       string = 'BLACK'        // vcPlayer color
   export const WHITE:       string = 'WHITE'        // vcPlayer color
-  export const BROWN:       string = 'rgba(185, 83, 0, 1)'
+  export const BROWN:       string = 'rgba(185,83,0,1)'
 
   export const black:       string = 'black'        // text color
   export const white:       string = 'white'
@@ -150,6 +150,13 @@ export namespace C {
   export const lightblue:   string = 'lightblue'
   export const lightgreen:  string = 'lightgreen'
   export const lightpink:   string = 'lightpink'
+  export const grey32:      string = 'rgb(32,32,32)'
+  export const grey64:      string = 'rgb(64,64,64)'
+  export const grey92:      string = 'rgb(92,92,92)'
+  export const grey128:     string = 'rgb(128,128,128)'
+  export const grey224:     string = 'rgb(224,224,224)'
+  export const transparent: string = 'rgba(0,0,0,0)'
+
   // from CityMap:
   export const vpWhite:     string = 'rgba(255, 255, 255,  1)'
   export const briteGold:   string = 'rgba(255, 213,  77,  1)'
