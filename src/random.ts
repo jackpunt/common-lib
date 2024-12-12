@@ -108,10 +108,10 @@ export class Random {
 
   /** access to original Math.random; 
    * 
-   * in case you want to redefine: Math.random = Random.random
+   * in case have done: Math.random = Random.seed_random
    */
   static math_random = Math.random
-  /** a random value to use as a seed for the seedable generator */
+  /** a seeded Random generator [mulberry32(some_random_string)] */
   static seed_random = Random.mulberry32(`${Random.math_random()}`);
   /** the random algorithm to use [math_random] */
   static use_random = Random.math_random;

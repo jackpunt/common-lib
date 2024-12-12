@@ -4,10 +4,17 @@ import { Random } from "./random";
 export function className (obj: { constructor: { name: any; }; }): string { 
   return (obj === undefined) ? 'undefined' : (!!obj && obj.constructor) ? obj.constructor.name : 'no_class'
 }
-// https://www.typescriptlang.org/docs/handbook/mixins.html
 
+/** Generic/Constrained Constructor 
+ * 
+ * from https://www.typescriptlang.org/docs/handbook/mixins.html
+ */ 
 export type Constructor<T = {}> = new (...args: any[]) => T;
-/** runtime construction of object with merged prototype. */
+
+/** runtime construction of object with merged prototype.
+ * 
+ * Alternative Pattern from: https://www.typescriptlang.org/docs/handbook/mixins.html
+ */
 export function applyMixins(derivedCtor: any, constructors: any[]) {
   constructors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
@@ -20,6 +27,28 @@ export function applyMixins(derivedCtor: any, constructors: any[]) {
     });
   });
 }
+
+/**
+ * follow prototype chain up to where obj[fieldName] exists.
+ * 
+ * @example
+ * const target = findProtoWithPropertyName('foo', obj) ?? obj;
+ * target['foo'] = value;
+ * 
+ * @param fieldName 
+ * @param obj 
+ * @returns prototype containing fieldName or undefined
+ */
+export function findProtoWithPropertyName(fieldName: string, obj: Object): Object | undefined {
+  if (Object.getOwnPropertyNames(obj).includes(fieldName)) return obj;
+  const proto = Object.getPrototypeOf(obj)
+  if (proto) {
+    return findProtoWithPropertyName(fieldName, proto)
+  } else {
+    return undefined;
+  }
+}
+
 /** timestamp, annotation, prefix (constructor name) and initial/format string. */
 export function stime (obj?: string | { constructor: { name: string; }; }, f: string = ''): string { 
   let anno = stime.anno(obj)
@@ -27,11 +56,13 @@ export function stime (obj?: string | { constructor: { name: string; }; }, f: st
   let spac = (name == '') && (f == '') ? '' : ' '
   return `${stime.fs()}${anno}${spac}${name}${f}`
 }
+
 /** supply an annotation after the time stamp. */
 stime.anno = (obj: string | { constructor: { name: string; }; }) => {
   let stage = obj?.['stage'] || obj?.['table']?.['stage']
   return !!stage ? (!!stage.canvas ? " C" : " N") : " -" as string
 }
+
 /** fields to extract from toISOString; see stime.fs.
  * 
  * Default: MM-DDTkk:mm:ss.SSSL
@@ -41,7 +72,8 @@ stime.isoFields = {
     YYYY: [0, 4], YY: [2, 4], MM: [5, 7], DD: [8, 10], T: [10, 11],
     kk: [11, 13], mm: [14, 16], ss: [17, 19], SSS: [20, 23], SS: [20, 22], S: [20, 21], Z: [23, 24]
   } as {[index:string]: [start: number, end: number]};
-/** format fields of ISO date string: YYYY MM DD kk mm ss SSS L/ll/LL/OO
+
+  /** format fields of ISO date string: YYYY MM DD kk mm ss SSS L/ll/LL/OO
  * replace fmt letters with indicated substring of Date.toISOString()
  * @param fmt YYYY-MM-DDTkk:mm:ss.SSSZ
  * @param hh - 12Hr (zero filled); optionally with: PM/pm
@@ -97,6 +129,7 @@ export function argVal(name: string, defVal: string, k: string = '--'): string {
   const argVal = process.argv.find((val, ndx, ary) => (ndx > 0 && ary[ndx - 1] == argKey)) || envVal
   return argVal
 }
+
 /** suitable input to new URL(url) */
 export function buildURL(scheme: string, host: string, domain: string, port: number, path?: string): string {
   return `${scheme}://${host}.${domain}:${port}/${!!path?path:''}`
