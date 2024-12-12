@@ -106,8 +106,20 @@ export class Random {
     }
   }
 
+  /** access to original Math.random; 
+   * 
+   * in case you want to redefine: Math.random = Random.random
+   */
   static math_random = Math.random
-  static seed_random = Random.mulberry32(`${Math.random( )}`);
-  static random = Random.math_random;
-
+  /** a random value to use as a seed for the seedable generator */
+  static seed_random = Random.mulberry32(`${Random.math_random()}`);
+  /** the random algorithm to use [math_random] */
+  static use_random = Random.math_random;
+  /**
+   * @param intRange if supplied return Math.floor(intRange * use_random())
+   * @returns range ? [0..range) : [0 .. 1)
+   */
+  static random(intRange?: number) {
+    return intRange ? Math.floor(intRange * Random.use_random()) : Random.use_random();
+  }
 }

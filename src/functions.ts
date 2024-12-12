@@ -1,3 +1,4 @@
+import { Random } from "./random";
 
 /** extra name field from constructor/class */
 export function className (obj: { constructor: { name: any; }; }): string { 
@@ -166,7 +167,7 @@ export function entriesArray<K,V>(k: Map<K,V>) {
 export function selectN<T>(bag: T[], n = 1, remove = true) {
   const rv: T[] = [];
   for (let i = 0; i < n; i++) {
-    const index = Math.floor(Math.random() * bag.length);
+    const index = Random.random(bag.length);
     rv.push(remove ? bag.splice(index, 1)[0] : bag[index]);
   }
   return rv;
@@ -175,7 +176,7 @@ export function selectN<T>(bag: T[], n = 1, remove = true) {
 /** Randomly re-order the elements of the given array (in place) and return it. */
 export function permute<T>(stack: T[]): T[] {
   for (let i = 0, len = stack.length; i < len; i++) {
-    let ndx: number = Math.floor(Math.random() * (len - i)) + i
+    let ndx: number = Random.random(len - i) + i;
     let tmp = stack[i];
     stack[i] = stack[ndx]
     stack[ndx] = tmp;
