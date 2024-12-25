@@ -213,6 +213,8 @@ export class Obj {
   /** 
    * return a copy of obj backfilled with def (or copy of def, with obj overwriting)
    *
+   * @deprecated use {...def, ...obj}
+   *
    * see also: webpack-merge: 
    * https://github.com/just-jeb/angular-builders/blob/13.x.x/packages/custom-webpack
    * 
