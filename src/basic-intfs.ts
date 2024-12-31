@@ -133,6 +133,11 @@ export namespace C {
     let ds = (v1: Uint8ClampedArray, v2: Uint8ClampedArray, i: number) => { return (v1[i] - v2[i]) * (v1[i] - v2[i]) }
     return Math.sqrt(ds(v1, v2, 0) + ds(v1, v2, 1) + ds(v1, v2, 2))
   }
+  export function pickTextColor(bgColor: string, textColors = [C.black, C.white]) {
+    const [maxd, maxc] = textColors.map(c => [C.dist(bgColor, c), c] as [number, string])
+      .reduce(([pd, pc], [cd, cc]) => cd > pd ? [cd, cc] : [pd, pc], [0, C.black])
+    return maxc;
+  }
   export const RED:         string = 'RED'          // nominal player color
   export const BLUE:        string = 'BLUE'         // nominal player color
   export const GREEN:       string = 'GREEN'        // nominal player color
@@ -158,18 +163,18 @@ export namespace C {
   export const transparent: string = 'rgba(0,0,0,0)'
 
   // from CityMap:
-  export const vpWhite:     string = 'rgba(255, 255, 255,  1)'
-  export const briteGold:   string = 'rgba(255, 213,  77,  1)'
-  export const coinGold:    string = 'rgba(235, 188,   0,  1)'
-  export const debtRust:    string = 'rgba(225,  92,   0,  1)' // Rust color
-  export const legalGreen:  string = 'rgba(  0, 100,   0, .3)'
-  export const legalRed:    string = 'rgba(100,   0,   0, .3)'
-  export const demoRed:     string = 'rgba(100,   0,   0, .8)'
-  export const dimYellow:   string = 'rgba(235, 235, 108,  1)' // contrasts with 'white' [also: khaki]
-  export const targetMark:  string = 'rgba(190, 250, 190, .8)'
-  export const debtMark:    string = 'rgba( 50,   0,   0, .3)'
-  export const markColor:   string = 'rgba( 50,  50,  50, .3)' // transparent nearly black
-  export const capColor:    string = 'rgba(100,   0,   0, .8)'
+  export const vpWhite:     string = 'rgba(255,255,255, 1)'
+  export const briteGold:   string = 'rgba(255,213, 77, 1)'
+  export const coinGold:    string = 'rgba(235,188,  0, 1)'
+  export const debtRust:    string = 'rgba(225, 92,  0, 1)' // Rust color
+  export const legalGreen:  string = 'rgba(  0,100,  0,.3)'
+  export const legalRed:    string = 'rgba(100,  0,  0,.3)'
+  export const demoRed:     string = 'rgba(100,  0,  0,.8)'
+  export const dimYellow:   string = 'rgba(235,235,108, 1)' // contrasts with 'white' [also: khaki]
+  export const targetMark:  string = 'rgba(190,250,190,.8)'
+  export const debtMark:    string = 'rgba( 50,  0,  0,.3)'
+  export const markColor:   string = 'rgba( 50, 50, 50,.3)' // transparent nearly black
+  export const capColor:    string = 'rgba(100,  0,  0,.8)'
   // https://www.quackit.com/css/color/charts/css_color_names_chart.cfm
 }
 

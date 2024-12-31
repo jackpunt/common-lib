@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 /bazel-out
+*.tgz
+
 # Test things
 /test/dist
 /test/src
