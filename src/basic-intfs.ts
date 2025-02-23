@@ -81,8 +81,8 @@ export namespace S {
   export const SW: string = 'SW'
   export const NW: string = 'NW'
 
-  export const dirRot: object = { N: 0, E: 90, S: 180, W: 270, NE: 30, SE: 150, SW: 210, NW: 330 }
-  export const dirRev: object = { N: S, S: N, E: W, W: E, NE: SW, SE: NW, SW: NE, NW: SE }
+  export const infin: string = '∞'; // String.fromCodePoint(0x221E);
+  export const sigma: string = 'Σ';
 
   export const rgbColor: string = 'rgbColor'// card prop
 
