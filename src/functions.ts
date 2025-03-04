@@ -261,3 +261,15 @@ export function uniq<T>(ary: T[]) {
   ary.forEach(elt => rv.includes(elt) || rv.push(elt));
   return rv;
 }
+
+type PublicInterface<T> = { [K in keyof T]: T[K] };
+declare global {
+  interface Math {
+    sum(...ary: number[]): number;
+    // because 'Date' is not a class, it's tricky to define Date.stime
+    // but it's easy to attach it to Math:
+    stime: (typeof stime) & PublicInterface<typeof stime>;
+  }
+}
+Math.sum = (...ary: number[]) => ary.reduce((pv, cv) => pv + cv, 0);
+Math.stime = stime; // can use Math.stime() in js/debugger
