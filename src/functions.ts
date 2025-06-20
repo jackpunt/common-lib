@@ -5,6 +5,12 @@ export function className (obj: { constructor: { name: any; }; }): string {
   return (obj === undefined) ? 'undefined' : (!!obj && obj.constructor) ? obj.constructor.name : 'no_class'
 }
 
+/** returns an Array filled with n Elements: [0 .. n-1] or [dn .. dn+n-1] or [f(0) .. f(n-1)] */
+export function arrayN(n: number, nf: number | ((i: number) => number) = 0) {
+  const fi = (typeof nf === 'number') ? (i: number) => (i + nf) : nf;
+  return Array.from(Array(n), (_, i) => fi(i))
+}
+
 /** Generic/Constrained Constructor 
  * 
  * from https://www.typescriptlang.org/docs/handbook/mixins.html
