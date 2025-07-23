@@ -20,14 +20,16 @@ export class F {
    * @param fam_wght font family, may have wght appended; defaults to F.defaultFont ['sans-serif']
    * @param wght the wght to be used; defaults to wght in fam_wght or F.defaultWght ['410']
    * @param style optional style [normal, italic]; defaults to F.defaultStyle ['normal']
-   * @returns 
+   * @returns ${style} ${weight ?? wght} ${size}px ${family}
    */
-  static fontSpec(size: number = F.defaultSize, fam_wght: string = F.defaultFont, wght: string | number = F.defaultWght, style = F.defaultStyle) {
+  static fontSpec(size0: number = F.defaultSize, fam_wght: string = F.defaultFont, wght: string | number = F.defaultWght, style0 = F.defaultStyle) {
     // extract weight info, compose: ${style} ${weight} ${family}
     // ASSERT: style is NOT included in given font_fam: 'nnpx family weight'
-    const regex = / (\d+|thin|light|regular|normal|bold|semibold|heavy)$/i;
+    const regex = /^(\w+ )?(thin |light |regular |normal |bold |semibold |heavy |\d+ )?(\d+)px (.*)$/i;
     const match = fam_wght.match(regex);
-    const weight = match?.[1];
+    const style = match?.[1] ?? style0;
+    const weight = match?.[2] ?? '';
+    const size = match?.[3] ?? size0;
     const family = weight ? fam_wght.slice(0, match.index) : fam_wght;
     const fontstr = `${style} ${weight ?? wght} ${size}px ${family}`;
     return fontstr;
@@ -110,6 +112,10 @@ export namespace S {
 }
 /** color strings, see also: https://www.quackit.com/css/color/charts/css_color_names_chart.cfm */
 export namespace C {
+  /** create string 'rgba(r,g,b,a)' string from given vector; optionally override alpha' */
+  export function rgbaToName(v: Uint8ClampedArray<ArrayBufferLike>, alpha?: number|string) {
+    return `rgba(${v[0]},${v[1]},${v[2]},${alpha ?? (v[3]/255).toFixed(2)})`
+  }
   /** Returns array<number> in RGBA order in the range 0 to 255 (requires document & canvas) */
   export function nameToRgba(name: string) {
     var canvas = document.createElement('canvas');
@@ -121,7 +127,7 @@ export namespace C {
   /** convert arbitary CSS color to rgba() notation, reset alpha if supplied. */
   export function nameToRgbaString(name: string, alpha?: number|string) {
     let v = C.nameToRgba(name)
-    return `rgba(${v[0]},${v[1]},${v[2]},${alpha ?? (v[3]/255).toFixed(2)})`
+    return rgbaToName(v, alpha);
   }
   /** add alpha value to an 'rgb(r,g,b)' string */
   export function rgba(rgb: string, a: number): string { return 'rgba' + rgb.substring(3, rgb.length - 1) + ', '+a+')' }
