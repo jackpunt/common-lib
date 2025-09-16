@@ -113,7 +113,7 @@ export namespace S {
 /** color strings, see also: https://www.quackit.com/css/color/charts/css_color_names_chart.cfm */
 export namespace C {
   /** create string 'rgba(r,g,b,a)' string from given vector; optionally override alpha' */
-  export function rgbaToName(v: Uint8ClampedArray<ArrayBufferLike>, alpha?: number|string) {
+  export function rgbaToName(v: Uint8ClampedArray, alpha?: number|string) {
     return `rgba(${v[0]},${v[1]},${v[2]},${alpha ?? (v[3]/255).toFixed(2)})`
   }
   /** Returns array<number> in RGBA order in the range 0 to 255 (requires document & canvas) */

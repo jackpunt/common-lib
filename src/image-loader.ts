@@ -3,6 +3,9 @@ import { S, stime } from "./index.js";
 /** Simple async Image loader [from ImageReveal.loadImage()]
  *
  * see also: createjs.ImageLoader, which we don't use.
+ * 
+ * @deprecated
+ * use: createjs-lib.ImageLoader which extends and supercede this.
  */
 export class ImageLoader {
   /**
