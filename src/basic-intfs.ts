@@ -30,7 +30,7 @@ export class F {
     const style = match?.[1] ?? style0;
     const weight = match?.[2] ?? '';
     const size = match?.[3] ?? size0;
-    const family = weight ? fam_wght.slice(0, match.index) : fam_wght;
+    const family = weight ? fam_wght.slice(0, match?.index) : fam_wght;
     const fontstr = `${style} ${weight ?? wght} ${size}px ${family}`;
     return fontstr;
   }
@@ -43,18 +43,18 @@ export class F {
     const regex = / (\d+|thin|light|regular|normal|bold|semibold|heavy)$/i;
     const match = fam_wght.match(regex);
     const weight = wght ?? match?.[1];
-    const family = weight ? fam_wght.slice(0, match.index) : fam_wght;
+    const family = weight ? fam_wght.slice(0, match?.index) : fam_wght;
     const fontstr = `${family} ${weight ?? 410}`;
     return fontstr;
   }
 
   /** Extract the 'px' fontSize from fontSpec. */
   static fontSize(fontSpec: string) {
-    const pixels = fontSpec ? Number.parseInt(fontSpec.match(/(\d+)px/)?.[1]) : F.defaultSize;
+    const pixels = fontSpec ? Number.parseInt(fontSpec.match(/(\d+)px/)?.[1]!) : F.defaultSize;
     return pixels;
   }
 
-  /** extract fontName 'family' from fontSpec */
+  /** extract fontName 'family' from fontSpec; expect \d+px is set in fontSpec */
   static fontName(fontSpec: string) {
     const family = fontSpec ? fontSpec.match(/\d+px (.*)/)?.[1] : F.defaultFont;
     return family
@@ -107,8 +107,6 @@ export namespace S {
   export const splice: string  = 'splice'     // EditBox event
 
   export const actionEnable: string = 'actionEnable' // RoboEvent type
-  export const doNotDrag:   string = 'doNotDrag'   // mouse Target property for Dragger
-
 }
 /** color strings, see also: https://www.quackit.com/css/color/charts/css_color_names_chart.cfm */
 export namespace C {
@@ -119,7 +117,7 @@ export namespace C {
   /** Returns array<number> in RGBA order in the range 0 to 255 (requires document & canvas) */
   export function nameToRgba(name: string) {
     var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
+    var context = canvas.getContext('2d')!; // assert there is a context
     context.fillStyle = name;
     context.fillRect(0,0,1,1);
     return context.getImageData(0,0,1,1).data;
@@ -131,8 +129,8 @@ export namespace C {
   }
   /** add alpha value to an 'rgb(r,g,b)' string */
   export function rgba(rgb: string, a: number): string { return 'rgba' + rgb.substring(3, rgb.length - 1) + ', '+a+')' }
-  /** array of color components: [r, g, b, a] */
-  export function values(rgb: string) { return rgb.match(/[.|\d]+/g).map(Number)}
+  /** array of color components: [r, g, b, a]; assert rgb string is well formed */
+  export function values(rgb: string) { return rgb.match(/[.|\d]+/g)!.map(Number)}
   /** distance between two rgb colors */
   export function dist(rgb1: string, rgb2: string): number { 
     let v1 = C.nameToRgba(rgb1), v2 = C.nameToRgba(rgb2) 
@@ -204,10 +202,11 @@ export type FromEntriesWithReadOnly<T> = FromEntries<DeepWriteable<T>>
 
 export class Obj {
   /** like Object.fromEntries(...[string, any]) 
+   * @param ary an array of [string, any]
    * @param rv supply empty object (of prototype)
    */
   static fromEntries<T extends object>(ary: [string, any][], rv:T = {} as T): T {
-    ary.forEach(([k, v]) => { rv[k] = v }) // QQQQ: is Object.fromEntries() sufficient? is it just <T>?
+    ary.forEach(([k, v]) => { (rv as any)[k] = v }) // QQQQ: is Object.fromEntries() sufficient? is it just <T>?
     return rv
   }
   /** clone: make a shallow copy of obj, using Obj.fromEntries(ary, rv?:T) */
@@ -236,7 +235,7 @@ export class Obj {
   static mergeDefaults<T extends object>(obj: T, def: T): T {
     let rv = {}
     Object.entries(def).forEach(([key, value]) => {
-      rv[key] = obj[key] || value
+      (rv as any)[key] = (obj as any)[key] || value
     })
     return rv as T
   }
