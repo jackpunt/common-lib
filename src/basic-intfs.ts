@@ -25,7 +25,7 @@ export class F {
   static fontSpec(size0: number = F.defaultSize, fam_wght: string = F.defaultFont, wght: string | number = F.defaultWght, style0 = F.defaultStyle) {
     // extract weight info, compose: ${style} ${weight} ${family}
     // ASSERT: style is NOT included in given font_fam: 'nnpx family weight'
-    const regex = /^(\w+ )?(thin |light |regular |normal |bold |semibold |heavy |\d+ )?(\d+)px (.*)$/i;
+    const regex = /^(\w+ )?(thin |light |regular |normal |bold |semibold |heavy |\d+ )?([\d.]+)px (.*)$/i;
     const match = fam_wght.match(regex);
     const style = match?.[1] ?? style0;
     const weight = match?.[2] ?? '';
@@ -50,13 +50,13 @@ export class F {
 
   /** Extract the 'px' fontSize from fontSpec. */
   static fontSize(fontSpec: string) {
-    const pixels = fontSpec ? Number.parseInt(fontSpec.match(/(\d+)px/)?.[1]!) : F.defaultSize;
+    const pixels = fontSpec ? Number.parseFloat(fontSpec.match(/([\d.]+)px/)?.[1]!) : F.defaultSize;
     return pixels;
   }
 
-  /** extract fontName 'family' from fontSpec; expect \d+px is set in fontSpec */
+  /** extract fontName 'family' from fontSpec; expect px before name: [\d.]+px name */
   static fontName(fontSpec: string) {
-    const family = fontSpec ? fontSpec.match(/\d+px (.*)/)?.[1] : F.defaultFont;
+    const family = fontSpec ? fontSpec.match(/[\d.]+px (.*)/)?.[1] : F.defaultFont;
     return family
   }
 
@@ -64,7 +64,7 @@ export class F {
 
 /** Math things */
 export namespace M {
-  /**  @return given value rounded to n decimal places. */
+  /**  @return given value rounded to n decimal places. see also: Number.toFixed() */
   export function decimalRound(value:number, n: number): number {
     const d = 10 ** n;
     return Math.round(value * d) / d;

@@ -57,7 +57,7 @@ export function findProtoWithPropertyName(fieldName: string, obj: Object): Objec
 
 /** timestamp, annotation, prefix (constructor name) and initial/format string. */
 export function stime (obj?: string | { constructor: { name: string; }; }, f: string = ''): string { 
-  let anno = stime.anno(obj)
+  let anno = stime.anno(obj ?? '')
   let name = (typeof obj === 'object') ? className(obj) : (obj || '')
   let spac = (name == '') && (f == '') ? '' : ' '
   return `${stime.fs()}${anno}${spac}${name}${f}`
@@ -65,7 +65,7 @@ export function stime (obj?: string | { constructor: { name: string; }; }, f: st
 
 /** supply an annotation after the time stamp. */
 stime.anno = (obj: string | { constructor: { name: string; }; }) => {
-  let stage = obj?.['stage'] || obj?.['table']?.['stage']
+  let stage = (obj as any)?.['stage'] || (obj as any)?.['table']?.['stage']
   return !!stage ? (!!stage.canvas ? " C" : " N") : " -" as string
 }
 
@@ -145,10 +145,10 @@ export function findFieldValue(obj: object, ... names: Array<string|Array<string
   let n = names.shift(), next: any
   if (!n) return obj            // return obj when no more field accessors
   if (typeof(n) == 'string') {
-    next = obj[n]
+    next = (obj as any)[n]
   } else {
-    let nn = n.find(n => !!obj[n])
-    next = !!nn ? obj[nn] : !!n[0] ? undefined : obj // [null, foo, bar] -> next = obj
+    let nn = n.find(n => !!(obj as any)[n])
+    next = !!nn ? (obj as any)[nn] : !!n[0] ? undefined : obj // [null, foo, bar] -> next = obj
   }
   return !!next ? findFieldValue(next, ... names) : undefined
 }
@@ -183,10 +183,10 @@ export function untilP<T>(pred: (v?: T, ...args: any) => boolean, actionP: (v?: 
 /**
  * A Promise that resolves to the given value after ms msecs.
  * @param ms how long to wait before resolving.
- * @param value any value.
+ * @param value a value of type \<T\>
  * @returns a Promise that resolves to the given value in ms msecs.
  */
-export function timedPromise<T>(ms: number, value?: T): Promise<T> {
+export function timedPromise<T>(ms: number, value: T): Promise<T> {
   return new Promise((res, rej) => setTimeout(() => res(value), ms))
 }
 

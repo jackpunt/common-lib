@@ -51,7 +51,7 @@ export class ImageLoader {
     let paths = fnames.map(fn => `${root}${fn}.${ext}`)
     this.loadImages(paths, (images: HTMLImageElement[]) => {
       fnames.forEach((fn, n) => {
-        images[n][S.Aname] = fn;
+        (images[n] as any)[S.Aname] = fn;    // inject .Aname field
         imap.set(fn, images[n])
       })
       if (cb) cb(imap)

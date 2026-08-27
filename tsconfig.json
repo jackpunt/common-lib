@@ -16,6 +16,7 @@
     "target": "ES2021",
     "module": "es2022",
     "lib": ["es2021", "dom"],
+    "types": ["node"],
     
     // Tells TypeScript to read JS files, as
     // normally they are ignored as source files
