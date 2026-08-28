@@ -31,13 +31,16 @@ export class F {
     const weight = match?.[2] ?? '';
     const size = match?.[3] ?? size0;
     const family = weight ? fam_wght.slice(0, match?.index) : fam_wght;
-    const fontstr = `${style} ${weight ?? wght} ${size}px ${family}`;
+    const fontstr = `${style} ${weight || wght} ${size}px ${family}`;
     return fontstr;
   }
   static composeFontName(size: number = 32, fam_wght: string = F.defaultFont, wght: string | number = F.defaultWght) { 
     return F.fontSpec(size, fam_wght, wght);
   }
-  /** replace weight */
+  /** 'family ?weight' ==> 'family wght'
+   * @param fam_wght: /any (int|wght)/
+   * @param wght: int|wght
+   */
   static family_wght(fam_wght: string, wght?: string | number) {
     // extract weight info, compose: ${style} ${weight} ${family}
     const regex = / (\d+|thin|light|regular|normal|bold|semibold|heavy)$/i;
