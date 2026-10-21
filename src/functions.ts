@@ -258,7 +258,8 @@ export function Arrays_intersect<T>(a: T[], b: T[], keyf: ((v: T) => any) = v =>
 
 /** splice first instance of 'elt' from given 'array' */
 export function removeEltFromArray<T>(elt: T, array: T[]): T[] {
-  return array.splice(array.indexOf(elt), 1);
+  const ndx = array.indexOf(elt);
+  return (ndx >= 0) ? array.splice(ndx, 1) : [];
 }
 
 /** reduce to one of each element: ary.forEach(elt => (!rv.includes(elt) -> rv.push(elt))) */
